@@ -1,10 +1,11 @@
 import pyttsx3 #import text 2 speech/python package
+from request import getlyrics
 
 engine = pyttsx3.init()
 exclude = ('the', 'i', 'you', 'that', 'my', 'and', 'on', 'is', 'so', 'your', 'it', 'a', 'to', 'make', "i'm")
 counts = dict() #create dict
 
-file = open('AssNTiddies.txt').read()
+file = getlyrics(input('Enter song: ')) #open('AssNTiddies.txt').read()
 perfectwords = file.lower().replace('.', '').replace(',', '').replace('\n', ' ').split()
 
 for word in perfectwords:
