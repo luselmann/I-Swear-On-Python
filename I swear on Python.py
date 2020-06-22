@@ -5,13 +5,16 @@ Created on Tue Jan 21 18:02:38 2020
 
 @author: luise
 """
-exclude = ('the', 'I', 'you', 'that', 'my', 'and', 'on', 'is', 'so', 'your', 'it', 'a', 'My', 'to', 'make', "I'm", 'And', 'ass,')
+exclude = ('the', 'i', 'you', 'that', 'my', 'and', 'on', 'is', 'so', 'your', 'it', 'a', 'to', 'make', "i'm")
 counts = dict() #create dict
 def word_count(str):
+    str = str.lower()
+    str = str.replace(',', '')
+    str = str.replace('.', '')
     words = str.split()
 
     for word in words:
-        if word not in exclude:  
+        if word not in exclude:
             if word in counts:
                 counts[word] += 1 #add value of word to dict
             else:
@@ -21,7 +24,7 @@ def readfiles(filename): #open, read every file line by line
     fhand = open(filename)
     for line in fhand:
         word_count(line) #calls, sends to other funct
-        
+
 song_titles = ('Dancefloor.txt', 'DickByThePound.txt', 'AssNTiddies.txt') #tuple with files
 
 for song in song_titles:
