@@ -1,25 +1,12 @@
- #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Jan 21 18:02:38 2020
-
-@author: luise
-"""
-
 import pyttsx3 #import text 2 speech/python package
-engine = pyttsx3.init()
 
+engine = pyttsx3.init()
 exclude = ('the', 'i', 'you', 'that', 'my', 'and', 'on', 'is', 'so', 'your', 'it', 'a', 'to', 'make', "i'm")
 counts = dict() #create dict
-file = ()
 
-def perfectwords(text):
-    return text.lower().replace('.', '').replace(',', '').replace('\n', ' ').split()
+# FUNCTIONS
 
-
-def word_count(str):
-    words = perfectwords(str)
-
+def word_count(words):
     for word in words:
         if word not in exclude:
             if word in counts:
@@ -27,21 +14,21 @@ def word_count(str):
             else:
                 counts[word] = 1 #add word to dict
 
-file = open('AssNTiddies.txt').read()
+# PROGRAM START
 
-word_count(file)
+file = open('AssNTiddies.txt').read()
+perfectwords = file.lower().replace('.', '').replace(',', '').replace('\n', ' ').split()
+
+word_count(perfectwords)
 
 sorted_counts = sorted(counts.items(), key = lambda x: x[1], reverse = True) #sort by value/frequency, reverse it to put highest on top
 
 firstfive = dict(sorted_counts[:5])
 print(firstfive)
 
-for word in perfectwords(file):
+for word in perfectwords:
     if word in firstfive:
         print(word)
         engine.say(word)
 
-try:
-    engine.runAndWait()
-except:
-    print("Start spyder again or I won't work!")
+engine.runAndWait()
