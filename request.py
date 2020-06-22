@@ -12,7 +12,13 @@ def getlyrics(song):
 
     response = requests.get('https://api.genius.com/search', data = data, headers = headers).json()
 
-    result = response['response']['hits'][0]['result']
+    hits = response['response']['hits']
+
+    if len(hits) < 1:
+        return 'no songs found'
+
+    result = hits[0]['result']
+    # printJSON(result)
 
     url = result['url']
     full_title = result['full_title']
@@ -20,7 +26,15 @@ def getlyrics(song):
 
     page = requests.get(url)
 
+    print(page.status_code)
+
     html = BeautifulSoup(page.text, 'html.parser')
 
-    lyrics = html.find('div', class_='lyrics').get_text()
+    div = html.find('div', { 'class': 'lyrics' })
+
+    if div is None:
+        return 'no lyrics found'
+
+    lyrics = div.get_text()
+
     return lyrics

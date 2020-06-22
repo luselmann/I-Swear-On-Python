@@ -2,11 +2,11 @@ import pyttsx3 #import text 2 speech/python package
 from request import getlyrics
 
 engine = pyttsx3.init()
-exclude = ('the', 'i', 'you', 'that', 'my', 'and', 'on', 'is', 'so', 'your', 'it', 'a', 'to', 'make', "i'm")
+exclude = ('the', 'i', 'you', 'that', 'my', 'and', 'on', 'is', 'so', 'your', 'it', 'a', 'to', 'make', "i'm") # tuple
 counts = dict() #create dict
 
 file = getlyrics(input('Enter song: ')) #open('AssNTiddies.txt').read()
-perfectwords = file.lower().replace('.', '').replace(',', '').replace('\n', ' ').split()
+perfectwords = file.lower().replace('.', '').replace(',', '').replace('\n', ' ').replace('-', '').split()
 
 for word in perfectwords:
     if word not in exclude:
