@@ -5,8 +5,14 @@ Created on Tue Jan 21 18:02:38 2020
 
 @author: luise
 """
+
+import pyttsx3 #import text 2 speech/python package
+engine = pyttsx3.init()
+
 exclude = ('the', 'i', 'you', 'that', 'my', 'and', 'on', 'is', 'so', 'your', 'it', 'a', 'to', 'make', "i'm")
 counts = dict() #create dict
+file = ()
+
 def word_count(str):
     str = str.lower()
     str = str.replace(',', '')
@@ -20,26 +26,24 @@ def word_count(str):
             else:
                 counts[word] = 1 #add word to dict
 
-def readfiles(filename): #open, read every file line by line
-    fhand = open(filename)
-    for line in fhand:
-        word_count(line) #calls, sends to other funct
-
-song_titles = ('Dancefloor.txt', 'DickByThePound.txt', 'AssNTiddies.txt') #tuple with files
-
-for song in song_titles:
-    readfiles(song) #call readfiles function
+file = open('AssNTiddies.txt')
+for line in file:
+    word_count(line)
 
 sorted_counts = sorted(counts.items(), key = lambda x: x[1], reverse = True) #sort by value/frequency, reverse it to put highest on top
 
-print(sorted_counts)
+firstfive = dict(sorted_counts[:5])
+print(firstfive)
 
-import pyttsx3 #import text 2 speech/python package
-engine = pyttsx3.init()
-for swearword in range(5):
-    for frequency in range(sorted_counts[swearword][1]):
-        engine.say(sorted_counts[swearword][0])
-    print(sorted_counts[swearword][0],sorted_counts[swearword][1],'times')
+print(file)
+
+for line in open('AssNTiddies.txt'):
+    for word in line.split():
+        word = word.lower().replace('.', '').replace(',', '')
+        if word in firstfive:
+            print(word)
+            engine.say(word)
+
 try:
     engine.runAndWait()
 except:
