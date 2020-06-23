@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Ghettotech Maker</title>
+
+</head>
+<body>
+
+    <input id='input' type="text" name="song" placeholder="type your song"> </input>
+    <button onclick="onClick()">
+      Ghettotechify!
+    </button>
+
+  <script type="text/javascript">
+
+  function onClick() {
+    var input = document.getElementById('input').value
+
+    fetch('http://127.0.0.1:5000/', {
+      method: "post",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: input
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      alert(data.title)
+      speak(data.lyrics.join(' '))
+    });
+
+    // send input to server
+
+    // speak server value
+
+    // speak(input)
+  }
+
+
+
+  function speak (input) {
+    window.speechSynthesis.cancel(" ")
+    var englishVoices = window.speechSynthesis.getVoices().filter(e => e.lang.indexOf('en') != -1)
+    var utter = new SpeechSynthesisUtterance(input)
+    utter.onstart=function(){
+    }
+    window.speechSynthesis.speak(utter)
+    utter.onend=function(){
+    }
+  }
+
+  </script>
+
+</body>
+</html>

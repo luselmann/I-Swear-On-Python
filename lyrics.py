@@ -38,5 +38,11 @@ def getlyrics(song):
         return 'no lyrics found' #if no lyrics available for the song -> no lyrics found
 
     lyrics = div.get_text() #defines lyrics as text taken from correct div -> gets only text from div
+    lyrics = lyrics.lower().replace('.', '').replace(',', '').replace('\n', ' ').replace('-', '')
 
-    return lyrics #returns and displays lyrics
+    rv = {
+        'lyrics': lyrics,
+        'full_title': full_title
+    }
+
+    return  rv #returns and displays lyrics
