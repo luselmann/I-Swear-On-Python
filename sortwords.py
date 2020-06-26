@@ -1,5 +1,5 @@
 def sortwords(words):
-    exclude = ('the', 'i', 'you', 'that', 'my', 'and', 'on', 'is', 'so', 'your', 'it', 'a', 'to', 'make', "i'm")
+    exclude = ('in', 'the', 'i', 'you', 'that', 'my', 'and', 'on', 'is', 'so', 'your', 'it', 'a', 'to', 'make', "i'm")
     # tuple of words to exclude
 
     perfectwords = words.split()

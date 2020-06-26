@@ -4,18 +4,56 @@
     <meta charset="utf-8">
     <title>Ghettotech Maker</title>
 
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/p5.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/addons/p5.sound.min.js"></script>
+    <script type="text/javascript" src="lib/p5.speech.js"></script>
+
+    <style>
+      body{
+        background: white;
+      }
+
+      button{
+        position: absolute;
+        top: 45%;
+        left: 53%;
+        font-size: 1.5em;
+				font-family: sans-serif;
+        border-radius:2em;
+			}
+
+      input{
+        position: absolute;
+        top: 45%;
+        left: 30%;
+        font-size: 1.5em;
+				font-family: sans-serif;
+        border-radius:2em;
+      }
+    </style>
+
 </head>
 <body>
 
-    <input id='input' type="text" name="song" placeholder="type your song"> </input>
+    <input id='input' type="text" name="song" placeholder=" type your song"> </input>
     <button onclick="onClick()">
       Ghettotechify!
     </button>
 
   <script type="text/javascript">
 
+  let soundLoop, kick, clap, clhat, ohat, lyrics, speaker, speakerIndex
+
   function onClick() {
+    userStartAudio()
+
+    soundLoop.stop()
+
     var input = document.getElementById('input').value
+
+    speaker.setRate(1.7)
+    speaker.setLang('en-US')
+    speaker.setVoice('Samantha')
 
     fetch('http://127.0.0.1:5000/', {
       method: "post",
@@ -29,30 +67,51 @@
     })
     .then(response => response.json())
     .then(data => {
-      alert(data.title)
-      speak(data.lyrics.join(' '))
-    });
-
-    // send input to server
-
-    // speak server value
-
-    // speak(input)
+      console.log(data)
+      document.getElementById('input').value = data.title
+      lyrics = data.lyrics
+      speakerIndex = 0
+      soundLoop.start()
+      //speak(data.lyrics.join(' '))
+    })
+    .catch(err => {
+      document.getElementById('input').value = 'no song found'
+    })
   }
 
 
-
-  function speak (input) {
-    window.speechSynthesis.cancel(" ")
-    var englishVoices = window.speechSynthesis.getVoices().filter(e => e.lang.indexOf('en') != -1)
-    var utter = new SpeechSynthesisUtterance(input)
-    utter.onstart=function(){
+    function preload() {
+      kick = loadSound('samples/808boom.wav')
+      clap = loadSound('samples/808clap.wav')
+      clhat = loadSound('samples/808clhat.wav')
     }
-    window.speechSynthesis.speak(utter)
-    utter.onend=function(){
-    }
-  }
 
+    function setup() {
+      // Karen Melina Samantha
+      speaker = new p5.Speech()
+      soundLoop = new p5.SoundLoop(onSoundLoop, 60/160/4) // 160BBPM
+    }
+
+    function onSoundLoop(timeFromNow) {
+      let index = (soundLoop.iterations) % 16
+
+      if (index === 6 || index === 14) {
+        speaker.stop()
+        speaker.speak(lyrics[speakerIndex])
+        speakerIndex++
+        if (speakerIndex >= lyrics.length)
+          soundLoop.stop()
+      }
+
+      //if (index % 2 === 0)
+      //  clhat.play()
+
+      if (index % 4 === 0)
+        kick.play()
+
+      if (index % 8 === 0)
+        clap.play()
+    }
   </script>
 
 </body>

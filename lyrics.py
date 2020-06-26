@@ -20,29 +20,35 @@ def getlyrics(song):
     hits = response['response']['hits'] #definition of hits for following conditional etc.
 
     if len(hits) < 1:
-        return 'no songs found' #if less than 1(none) hit found -> no songs found
+        print('no songs found') #if less than 1(none) hit found -> no songs found
 
     result = hits[0]['result'] #first result chosen automatically (taken from result JSON block)
 
     url = result['url'] #defines url for first result (taken from url JSON block)
     full_title = result['full_title'] #defines title and artist (taken from full_title JSON block)
     printJSON(full_title) #prints title and artist in JSON format
+    printJSON(url)
 
-    page = requests.get(url) #finds page/url of song
+    div = [] #empty list
+    tries = 0 #number of tries
 
-    html = BeautifulSoup(page.text, 'html.parser') #finds elements in html
+    while (len(div) == 0): #while to retry search if not found
+        page = requests.get(url, headers = { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36'} ) #finds page/url of song
+        html = BeautifulSoup(page.text, 'html.parser') #finds elements in html
 
-    div = html.find('div', { 'class': 'lyrics' }) #finds lyrics element
+        div = html.findAll('div', { 'class': 'lyrics' }) #finds lyrics element
 
-    if div is None:
-        return 'no lyrics found' #if no lyrics available for the song -> no lyrics found
+        tries += 1 #every failed try adds 1 to 'tries'
 
-    lyrics = div.get_text() #defines lyrics as text taken from correct div -> gets only text from div
+        if (tries >= 50):
+            break    #after 50 tries and nothing found -> stop while loop
+
+    lyrics = div[0].get_text() #defines lyrics as text taken from correct div -> gets only text from div
     lyrics = lyrics.lower().replace('.', '').replace(',', '').replace('\n', ' ').replace('-', '')
 
-    rv = {
+    returnValue = {
         'lyrics': lyrics,
         'full_title': full_title
     }
 
-    return  rv #returns and displays lyrics
+    return returnValue

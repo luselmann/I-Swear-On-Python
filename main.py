@@ -5,9 +5,12 @@ from sortwords import sortwords
 engine = pyttsx3.init() #initializing speech engine
 
 file = getlyrics(input('Enter song and artist: ')) #returned lyrics from getlyrics funtion defined as file
-firstfive = sortwords(file)
+lyrics = file.get('lyrics')
+firstfive = sortwords(lyrics)
 
-for word in file.split():
+print(lyrics.split())
+
+for word in lyrics.split():
     if word in firstfive:
         print(word)
         engine.say(word) #text to speech
