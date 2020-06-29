@@ -10,9 +10,9 @@ firstfive = sortwords(lyrics)
 
 print(lyrics.split())
 
-for word in lyrics.split():
+for word in lyrics.split(): #split line into words
     if word in firstfive:
-        print(word)
+        print(word) #print top 5 words
         engine.say(word) #text to speech
 
 engine.runAndWait() #command for engine to start
